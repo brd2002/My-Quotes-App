@@ -1,7 +1,9 @@
 package com.example.myquotesapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,12 +31,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myquotesapp.models.Quote
 
 
 @Composable
-fun QuoteListItem(){
+fun QuoteListItem(quote: Quote , onClick: ()-> Unit){
+//    Log.d("quotelistitem", "QuoteListItem: this is working fine")
     Card(elevation = CardDefaults.cardElevation(4.dp),
-        modifier = Modifier.padding(8.dp)) {
+        modifier = Modifier
+            .padding(8.dp)
+            .clickable { onClick() }) {
         Row(
             modifier = Modifier.padding(16.dp)
         ) {
@@ -46,56 +52,25 @@ fun QuoteListItem(){
                     .rotate(180f)
                     .size(40.dp),
 
-                contentDescription = "Quote" )
+                contentDescription = "" )
             Spacer(modifier = Modifier.padding(10.dp))
             Column(modifier = Modifier.fillMaxWidth(1f)) {
-                Text(text = "Be the change that you wish to see in the world." ,
+                Text(text = quote.quote,
                     style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(0.dp , 0.dp , 0.dp , 8.dp)
                 )
+//                Log.d("quote", quote.quote)
                 Box(modifier = Modifier
                     .background(Color(0xFFEEEEEE))
                     .fillMaxWidth(.4f)
                     .height(1.dp))
-                Text(text = "Mahatma Gandhi" ,
+                Text(text = quote.authorName ,
                     modifier = Modifier.padding(4.dp),
                     style = MaterialTheme.typography.bodySmall)
+//                Log.d("quoteauthor", quote.authorName)
             }
 
         }
     }
 }
 
-@Preview
-@Composable
- fun QuoteDetails() {
-    Box (contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize(1f)
-            .background(
-                Brush.sweepGradient(
-                    colors = listOf(
-                        Color(0xffffffff),
-                        Color(0xFFF3E8E8)
-                    )
-                )
-            )
-    ) {
-        Card(elevation = CardDefaults.cardElevation(4.dp),
-            modifier = Modifier.padding(32.dp)) {
-            Column(verticalArrangement = Arrangement.Center ,
-                modifier = Modifier
-                    .padding(16.dp , 24.dp)) {
-                Image(imageVector = Icons.Filled.FormatQuote,
-                    modifier = Modifier
-                        .rotate(180f)
-                        .size(80.dp)
-                    , contentDescription = "Quote")
-                Text(text = "Be the change that you wish to see in the world.",
-                    style = MaterialTheme.typography.bodyLarge
-                )
-                Spacer(modifier = Modifier.height(16.dp))
-                Text(text = "Mahatma Gandhi" , style = MaterialTheme.typography.bodySmall)
-            }
-        }
-    }
-}
