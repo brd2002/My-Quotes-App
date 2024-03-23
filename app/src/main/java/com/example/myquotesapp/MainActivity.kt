@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myquotesapp.screens.QuoteDetails
 import com.example.myquotesapp.screens.QuoteListScreen
 import com.example.myquotesapp.ui.theme.MyQuotesAppTheme
 import com.google.gson.internal.bind.DateTypeAdapter
@@ -49,12 +50,19 @@ class MainActivity : ComponentActivity() {
 }
 
 
+@Preview(showBackground =  true , showSystemUi = true)
 @Composable
 fun App() {
     if(DataManager.isDataLoaded.value == true){
-        Log.d("data" , DataManager.data[0].toString())
-        QuoteListScreen(data = DataManager.data) {
-            Log.d("quotelist", "App: ")
+//        Log.d("data" , DataManager.data[0].toString())
+        if (DataManager.currentPage.value == Pages.DATALIST) {
+            QuoteListScreen(data = DataManager.data ) {
+//            Log.d("quotelist", "App: ")
+                DataManager.switchPages(it)
+
+            }
+        }else {
+            DataManager.currentQuote?.let { QuoteDetails(quote = it) }
         }
     }else {
         Box(contentAlignment = Alignment.Center ,
@@ -63,7 +71,7 @@ fun App() {
         }
     }
 }
-@Preview(showBackground =  true , showSystemUi = true)
+
 @Composable
 fun IndeterminateCircularIndicator() {
     Column(verticalArrangement = Arrangement.Center,
@@ -71,7 +79,6 @@ fun IndeterminateCircularIndicator() {
         Box(contentAlignment = Alignment.Center) {
             CircularProgressIndicator(
                 modifier = Modifier
-                    .background(color = Color.Black)
                     .width(64.dp)
                     .align(Alignment.Center),
                 color = MaterialTheme.colorScheme.secondary,
@@ -79,4 +86,8 @@ fun IndeterminateCircularIndicator() {
             )
         }
     }
+}
+enum class Pages{
+    DATALIST ,
+    DETAILSPAGE,
 }
